@@ -54,13 +54,27 @@ import ContactForm from "./components/ContactForm/ContactForm";
 import ContactList from "./components/ContactList/ContactList";
 import SearchBox from "./components/SearchBox/SearchBox";
 
+import { useDispatch, useSelector } from "react-redux";
+import { fetchContacts } from "./redux/operations";
+import { useEffect } from "react";
+import { selectError, selectIsLoading } from "./redux/selectors";
+
 export default function App() {
+  const dispatch = useDispatch();
+  const error = useSelector(selectError);
+  const isLoading = useSelector(selectIsLoading);
+
+  useEffect(() => {
+    dispatch(fetchContacts());
+  }, [dispatch]);
+
   return (
     <div>
       <h1>Phonebook</h1>
       <ContactForm />
       <SearchBox />
       <ContactList />
+      {isLoading && !error && <b>Loading...</b>}
     </div>
   );
 }
